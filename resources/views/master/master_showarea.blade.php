@@ -7,11 +7,11 @@
     <a class="nav-link active" href="{{url('master/home')}}">ข้อมูลสมาชิกทั้งหมด</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#menu1">รายการคะแนนเสียงทั้งหมด</a>
+    <a class="nav-link" href="{{url('master/total')}}">รายการคะแนนเสียงทั้งหมด</a>
   </li>
 </ul><br>
 <div class="row">
-  <div class="col-md-9">
+  <div class="col-md-12">
           <div class="panel panel-info">
               <div class="panel-heading">
               <div class="row">
@@ -41,7 +41,14 @@
                           <td>{{$header->district}}</td>
                           <td>{{$header->amphoe}}</td>
                           <td>{{$header->province}}</td>
+                          @foreach($scores as $row)
+                              @if($row->area_id==$area->id)
+                                <td>{{$row->score}}</td>
+                              @break
+                              @elseif($loop->last)
                           <td></td>
+                          @endif
+                          @endforeach
                         </tr>
                       </tbody>
                       @endforeach
@@ -59,34 +66,6 @@
               </div>
             </div>
       </div>
-</div>
-<div class="col-sm-3">
-<div class="card">
-  <h6 class="card-header">ค้นหาเขตรับผิดชอบ</h6>
-    <div class="card-body">
-      <div class="form-group row">
-        <label class="col-sm-4 col-form-label">ชื่อเขต</label>
-        <div class="col-sm-8">
-          <select name="l" class="form-control">
-            <option value="">ทั้งหมด</option>
-            @if(isset($areas))
-            @foreach($areas as  $area)
-            <option value="{{$area->id}}">{{$area->area_name}}</option>
-            @endforeach
-            @else
-            <option value="ทั้งหมด">ทั้งหมด</option>
-            @endif
-          </select>
-        </div>
-
-    </div>
-    <div class="form-group row mb-0">
-    <div class="col-sm-12">
-        <input type="submit" class="btn btn-block btn-primary" value="ค้นหา">
-      </div>
-    </div>
-    </div>
-</div>
 </div>
 </div>
 @endsection

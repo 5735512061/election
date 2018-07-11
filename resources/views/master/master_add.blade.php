@@ -10,7 +10,7 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.20/css/uikit.css">
   <link rel="stylesheet" href="{{asset('jquery.Thailand.js/dist/jquery.Thailand.min.css')}}">
-      <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.css')}}">
   @include('template/bg_top')
 </head>
 <body>
@@ -51,6 +51,9 @@
                                    <a class="dropdown-item" href="{{url('/profile')}}">
                                       แก้ไขโปรไฟล์
                                    </a>
+																	 <a class="dropdown-item" href="{{url('/master/changePassword')}}">
+                                      เปลี่ยนรหัสผ่าน
+                                   </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -87,20 +90,37 @@
         <div class="col-md-1"></div>
       <div class="col-md-5"><br>
           <div class="form-group">
-            <label>ชื่อสมาชิก</label>
-            <input class="form-control" name="header_name" type="text">
+            <label>ชื่อสมาชิก
+							@if ($errors->has('header_name'))
+							<span class="text-danger">({{ $errors->first('header_name') }})</span>
+							@endif
+						</label>
+            <input class="form-control" name="header_name" value="{{old ('header_name')}}" type="text">
           </div>
           <p>
-            <label>ชื่อเข้าใช้งานระบบ</label>
-            <input class="form-control" name="name" type="text">
+            <label>ชื่อเข้าใช้งานระบบ
+							@if ($errors->has('name'))
+							<span class="text-danger">({{ $errors->first('name') }})</span>
+							@endif
+						</label>
+            <input class="form-control" name="name" value="{{old ('name')}}" type="text">
+          </p>
+
+          <p>
+            <label>เบอร์โทรศัพท์
+							@if ($errors->has('tel'))
+							<span class="text-danger">({{ $errors->first('tel') }})</span>
+							@endif
+				    </label>
+            <input class="form-control" name="tel" value="{{old ('tel')}}" type="text">
           </p>
           <p>
-            <label>เบอร์โทรศัพท์</label>
-            <input class="form-control" name="tel" type="text">
-          </p>
-          <p>
-               <label>อำเภอ</label>
-               <input class="form-control" name="amphoe" type="text" >
+               <label>อำเภอ
+								 @if ($errors->has('amphoe'))
+	 							<span class="text-danger">({{ $errors->first('amphoe') }})</span>
+	 							@endif
+							 </label>
+               <input class="form-control" name="amphoe" value="{{old ('amphoe')}}" type="text" >
           </p>
 					<p>
                <label>สถานะ</label>
@@ -112,22 +132,37 @@
         </div>
       <div class="col-md-5"><br>
         <p>
-            <label>อีเมลเข้าใช้งานระบบ</label>
-            <input class="form-control" name="email" type="text">
-          </p>
+            <label>อีเมลเข้าใช้งานระบบ
+							@if ($errors->has('email'))
+							<span class="text-danger">({{ $errors->first('email') }})</span>
+							@endif
+						</label>
+            <input class="form-control" name="email" value="{{old ('email')}}"  type="text">
+        </p>
         <p>
-            <label>รหัสผ่าน</label>
+            <label>รหัสผ่าน
+							@if ($errors->has('password'))
+							<span class="text-danger">({{ $errors->first('password') }})</span>
+							@endif
+						</label>
             <input class="form-control" name="password" type="password">
         </p>
         <p>
-          <label>ตำบล</label>
-          <input class="form-control" name="district" type="text" >
+          <label>ตำบล
+						@if ($errors->has('district'))
+						<span class="text-danger">({{ $errors->first('district') }})</span>
+						@endif
+					</label>
+          <input class="form-control" name="district" value="{{old ('district')}}" type="text" >
         </p>
         <p>
-          <label>จังหวัด</label>
-          <input class="form-control" name="province" type="text" >
+          <label>จังหวัด
+						@if ($errors->has('province'))
+						<span class="text-danger">({{ $errors->first('province') }})</span>
+						@endif
+					</label>
+          <input class="form-control" name="province" value="{{old ('province')}}" type="text" >
         </p>
-
         <input type="hidden" class="form-control" name="master_id" value="{{Auth::user()->id}}">
         <input type="hidden" class="form-control" name="image" value="profile.jpg">
       </div>

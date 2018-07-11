@@ -10,7 +10,7 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.20/css/uikit.css">
   <link rel="stylesheet" href="{{asset('jquery.Thailand.js/dist/jquery.Thailand.min.css')}}">
-      <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.css')}}">
 </head>
 <body>
     <div id="app">
@@ -46,7 +46,7 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                   <a class="dropdown-item" href="{{url('/profile')}}">
+                                   <a class="dropdown-item" href="{{url('header/profile')}}">
                                       แก้ไขโปรไฟล์
                                    </a>
 																	 <a class="dropdown-item" href="{{url('/header/changePassword')}}">
@@ -87,16 +87,28 @@
     		    <div class="col-md-1"></div>
     			<div class="col-md-5">
     			    <div class="form-group"><br>
-      					<label>ชื่อผู้ดูแลเขต</label>
-      					<input class="form-control" name="admin_name" type="text">
+      					<label>ชื่อผู้ดูแลเขต
+									@if ($errors->has('admin_name'))
+									<span class="text-danger">({{ $errors->first('admin_name') }})</span>
+									@endif
+								</label>
+      					<input class="form-control" name="admin_name" value="{{old ('admin_name')}}" type="text">
       				</div>
       				<p>
-      					<label>ชื่อเข้าใช้งานระบบ</label>
-      					<input class="form-control" name="name" type="text">
+      					<label>ชื่อเข้าใช้งานระบบ
+									@if ($errors->has('name'))
+									<span class="text-danger">({{ $errors->first('name') }})</span>
+									@endif
+								</label>
+      					<input class="form-control" name="name" value="{{old ('name')}}" type="text">
       				</p>
               <p>
-                <label>เบอร์โทรศัพท์</label>
-                <input class="form-control" name="tel" type="text">
+                <label>เบอร์โทรศัพท์
+									@if ($errors->has('tel'))
+									<span class="text-danger">({{ $errors->first('tel') }})</span>
+									@endif
+								</label>
+                <input class="form-control" name="tel" value="{{old ('tel')}}" type="text">
               </p>
               <p>
                    <label>อำเภอ</label>
@@ -113,12 +125,20 @@
       			</div>
     			<div class="col-md-5"><br>
     				<p>
-      					<label>อีเมลเข้าใช้งานระบบ</label>
-      					<input class="form-control" name="email" type="text">
+      					<label>อีเมลเข้าใช้งานระบบ
+									@if ($errors->has('email'))
+								   <span class="text-danger">({{ $errors->first('email') }})</span>
+								  @endif
+								</label>
+      					<input class="form-control" name="email" value="{{old ('email')}}" type="text">
       				</p>
     				<p>
-      					<label>รหัสผ่าน</label>
-      					<input class="form-control" name="password" type="password">
+      					<label>รหัสผ่าน
+									@if ($errors->has('password'))
+								   <span class="text-danger">({{ $errors->first('password') }})</span>
+								  @endif
+						    </label>
+      					<input class="form-control" name="password" value="{{old ('password')}}" type="password">
       			</p>
             <p>
               <label>ตำบล</label>
@@ -135,7 +155,7 @@
               </div>
               <div class="row">
                 <div class="col-md-6"></div>
-                <div class="col-md-5"><div align="right"><button type="submit" class="btn btn-info">Save</button><br><br></div></div>
+                <div class="col-md-5"><div align="right"><button type="submit" class="btn btn-info">บันทึกข้อมูล</button><br><br></div></div>
                 <div class="col-md-1"></div>
               </div>
     		</div>

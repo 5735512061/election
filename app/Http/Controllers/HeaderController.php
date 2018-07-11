@@ -10,6 +10,8 @@ use App\Admin;
 use App\Header;
 use App\Area;
 use App\Score;
+use Validator;
+use DB;
 
 class HeaderController extends Controller
 {
@@ -26,21 +28,27 @@ class HeaderController extends Controller
      public function changePassword(Request $request){
          if (!(Hash::check($request->get('current-password'), Auth::user()->password))) {
              // The passwords matches
-             return redirect()->back()->with("error","Your current password does not matches with the password you provided. Please try again.");
+             return redirect()->back()->with("error","รหัสผ่านปัจจุบันของคุณไม่ตรงกับรหัสผ่านที่คุณระบุ กรุณาลองอีกครั้ง");
          }
          if(strcmp($request->get('current-password'), $request->get('new-password')) == 0){
              //Current password and new password are same
-             return redirect()->back()->with("error","New Password cannot be same as your current password. Please choose a different password.");
+             return redirect()->back()->with("error","รหัสผ่านใหม่ต้องไม่เหมือนกับรหัสผ่านปัจจุบันของคุณ โปรดเลือกรหัสผ่านอื่น");
          }
          $validatedData = $request->validate([
              'current-password' => 'required',
              'new-password' => 'required|string|min:6|confirmed',
+         ],[
+             'current-password.required' => 'กรุณากรอกรหัสผ่านเก่า',
+             'new-password.required' => 'กรุณากรอกรหัสผ่านใหม่',
+             'new-password.min' => 'กรุณากรอกรหัสผ่านใหม่อย่างน้อย 6 อักษร',
+             'new-password.confirmed' => 'กรุณายืนยันรหัสผ่านใหม่',
+
          ]);
          //Change Password
          $user = Auth::user();
          $user->password = bcrypt($request->get('new-password'));
          $user->save();
-         return redirect()->back()->with("success","Password changed successfully !");
+         return redirect()->back()->with("success","เปลี่ยนรหัสผ่านสำเร็จ");
      }
 
     public function __construct()
@@ -63,7 +71,7 @@ class HeaderController extends Controller
       $header = Header::findOrFail(Auth::user()->id);
       $page = $request->input('page');
       $page = ($page != null)?$page:1;
-      
+
       return view('header/header_home')->with('admins',$admins)
                                        ->with('header',$header)
                                        ->with('page',$page)
@@ -72,20 +80,44 @@ class HeaderController extends Controller
 
     public function add_admin(Request $request)
     {
-      $password = request('password');
-      $data = new Admin;
-      $data->name = request('name');
-      $data->admin_name = request('admin_name');
-      $data->header_id = request('header_id');
-      $data->tel = request('tel');
-      $data->email = request('email');
-      $data->status = request('status');
-      $data->image = "profile.jpg";
-      $data->password = \Hash::make($password);
-      $data->save();
+      $validator = Validator::make($request->all(), $this->rules(), $this->messages());
+      if ($validator->passes()) {
+      $admin = request()->all();
+      $admin['image'] = 'profile.jpg';
+      $admin['password'] = bcrypt($admin['password']);
+      $admin = Admin::create($admin);
 
       $admin = Admin::all()->last();
       return redirect()->action('HeaderController@area_admin',['admin_id'=>$admin->id]);
+      }
+      else {
+            return back()->withErrors($validator)->withInput();
+      }
+    }
+
+    public function rules() {
+        return [
+          'name' => 'required',
+          'password' => 'required|min:6',
+          'email' => 'email|required|unique:admins',
+          'tel' => 'required|regex:/(0)[0-9]{9}/',
+          'admin_name' => 'required|max:255',
+        ];
+    }
+
+    public function messages() {
+        return [
+          'name.required' => 'กรุณากรอกชื่อ',
+          'password.required' => 'กรุณากรอกรหัสผ่าน',
+          'password.min' => 'กรุณากรอกรหัสผ่านอย่างน้อย 6 ตัวอักษร',
+          'email.required' => 'กรุณากรอกอีเมล',
+          'email.unique' => 'อีเมลนี้มีผู้ลงทะเบียนแล้ว',
+          'email.email' => 'กรอกที่อยู่อีเมลให้ถูกต้อง',
+          'tel.required' => 'กรุณากรอกเบอร์โทรศัพท์',
+          'tel.regex' => 'กรอกเบอร์โทรศัพท์ให้ถูกต้อง',
+          'admin_name.required' => 'กรุณากรอกชื่อผู้ดูแลเขต',
+          'admin_name.max' => 'กรุณากรอกชื่อผู้ดูแลเขตความยาวไม่เกิน 255 ตัวอักษร',
+        ];
     }
 
     public function register()
@@ -104,6 +136,26 @@ class HeaderController extends Controller
     public function update_admin(Request $request)
     {
       $id = $request->get('admin_id');
+      request()->validate([
+       'admin_name'  => 'required|max:255',
+       'email' => 'email|required',
+       'email' => 'email|required|unique:admins,email,'.$id,
+       'tel' => 'required|regex:/(0)[0-9]{9}/',
+       'name' => 'required|max:255',
+
+      ], [
+       'admin_name.required' => 'กรุณากรอกชื่อผู้ดูแลเขต',
+       'admin_name.max' => 'กรุณากรอกชื่อผู้ดูแลเขตความยาวไม่เกิน 255 ตัวอักษร',
+       'email.required' => 'กรุณากรอกอีเมล',
+       'email.unique' => 'อีเมลนี้มีผู้ลงทะเบียนแล้ว',
+       'email.email' => 'กรอกที่อยู่อีเมลให้ถูกต้อง',
+       'tel.required' => 'กรุณากรอกเบอร์โทรศัพท์',
+       'tel.regex' => 'กรอกเบอร์โทรศัพท์ให้ถูกต้อง',
+       'name.required' => 'กรุณากรอกชื่อ',
+       'name.max' => 'กรุณากรอกชื่อความยาวไม่เกิน 255 ตัวอักษร',
+
+      ]);
+
       if($request->hasFile('avatar'))
       {
       $avatar = $request->file('avatar');
@@ -139,9 +191,19 @@ class HeaderController extends Controller
 
     public function addarea(Request $request)
     {
-        $admin_id = $request->get('admin_id');
-        $area_name = $request->get('area_name');
-            for($i=0;$i<count($area_name);$i++){
+
+       request()->validate([
+        'admin_id'  => 'required',
+        'area_name.*' => 'required|max:255',
+       ], [
+        'admin_id.required' => 'กรุณาเลือกผู้ดูแลเขต',
+        'area_name.*.required' => 'กรุณากรอกชื่อเขต',
+        'area_name.*.max' => 'กรุณากรอกชื่อเขตความยาวไม่เกิน 255 ตัวอักษร',
+       ]);
+       $admin_id = $request->get('admin_id');
+       $area_name = $request->get('area_name');
+
+        for($i=0;$i<count($area_name);$i++){
              $data = new Area;
              $data->admin_id = $admin_id;
              $data->area_name = $area_name[$i];
@@ -151,27 +213,30 @@ class HeaderController extends Controller
     }
 
     public function showarea(Request $request,$admin_id){
-        $NUM_PAGE = 5;
-        $areas = Area::where('admin_id',$request->admin_id)
-                     ->orderBy('updated_at','desc')
-                     ->paginate($NUM_PAGE);
-
-        $page = $request->input('page');
-        $page = ($page != null)?$page:1;
-        $admin = Admin::findOrFail($request->admin_id);
-        $header= Header::findOrFail(Auth::user()->id);
-        return view('header/header_showarea')->with('areas',$areas)
-                                      ->with('header',$header)
-                                      ->with('page',$page)
-                                      ->with('admin',$admin)
-                                      ->with('NUM_PAGE',$NUM_PAGE);
+      $NUM_PAGE = 5;
+      $areas = Area::where('admin_id',$request->admin_id)
+                   ->orderBy('updated_at','desc')
+                   ->paginate($NUM_PAGE);
+      $scores = DB::select('SELECT `score`,`area_id` FROM `scores`');
+      $page = $request->input('page');
+      $page = ($page != null)?$page:1;
+      $admin = Admin::findOrFail($request->admin_id);
+      $header= Header::findOrFail(Auth::user()->id);
+      return view('header/header_showarea')->with('areas',$areas)
+                                    ->with('header',$header)
+                                    ->with('page',$page)
+                                    ->with('admin',$admin)
+                                    ->with('NUM_PAGE',$NUM_PAGE)
+                                    ->with('scores',$scores);
     }
 
     public function deletearea($area_id)
     {
         $area = Area::findOrFail($area_id);
-        $score = Score::where('area_id',$area->area_id)
-                      ->delete();
+        $scores = Score::get();
+        foreach($scores as $score){
+          $score = Score::where('area_id',$area->id)->delete();
+        }
         $area = Area::findOrFail($area_id)->delete();
         return back();
     }
@@ -185,6 +250,12 @@ class HeaderController extends Controller
     public function updatearea(Request $request,$area_id)
     {
         $area = Area::findOrFail($area_id);
+        request()->validate([
+         'area_name' => 'required|max:255',
+        ], [
+         'area_name.required' => 'กรุณากรอกชื่อเขต',
+         'area_name.max' => 'กรุณากรอกชื่อเขตความยาวไม่เกิน 255 ตัวอักษร',
+        ]);
         $area->update($request->all());
         return redirect()->action('HeaderController@showarea',['admin_id'=>$area->admin_id]);
     }
@@ -198,6 +269,21 @@ class HeaderController extends Controller
 
     public function update_avatar(Request $request)
     {
+      request()->validate([
+        'name' => 'required',
+        'email' => 'email|required|unique:headers,email,'.Auth::user()->id,
+        'tel' => 'required|regex:/(0)[0-9]{9}/',
+        'header_name' => 'required',
+
+      ], [
+        'name.required' => 'กรุณากรอกชื่อ',
+        'email.required' => 'กรุณากรอกอีเมล',
+        'email.email' => 'กรอกที่อยู่อีเมลให้ถูกต้อง',
+        'email.unique' => 'อีเมลนี้มีผู้ลงทะเบียนแล้ว',
+        'tel.required' => 'กรุณากรอกเบอร์โทรศัพท์',
+        'tel.regex' => 'กรอกเบอร์โทรศัพท์ให้ถูกต้อง',
+        'header_name.required' => 'กรุณากรอกชื่อสมาชิก',
+      ]);
       if($request->hasFile('avatar'))
       {
       $avatar = $request->file('avatar');
@@ -224,15 +310,29 @@ class HeaderController extends Controller
       $NUM_PAGE = 5;
       $key = $request->get('key');
       $admins = Admin::where('admin_name','like','%'.$key.'%')
+                     ->orderBy('updated_at','desc')
+                     ->paginate($NUM_PAGE);
+      $header = Header::findOrFail(Auth::user()->id);
+      $page = $request->input('page');
+      $page = ($page != null)?$page:1;
+      return view('header/header_home')->with('admins',$admins)
+                                       ->with('header',$header)
+                                       ->with('page',$page)
+                                       ->with('NUM_PAGE',$NUM_PAGE);
+    }
+
+    public function score_total(Request $request)
+    {
+      $NUM_PAGE = 5;
+      $admins = Admin::where('header_id',Auth::user()->id)
                       ->orderBy('updated_at','desc')
                       ->paginate($NUM_PAGE);
       $header = Header::findOrFail(Auth::user()->id);
       $page = $request->input('page');
       $page = ($page != null)?$page:1;
-
-      return view('header/header_home')->with('admins',$admins)
-                                       ->with('header',$header)
-                                       ->with('page',$page)
-                                       ->with('NUM_PAGE',$NUM_PAGE);
+      return view('header/header_total')->with('admins',$admins)
+                                        ->with('header',$header)
+                                        ->with('page',$page)
+                                        ->with('NUM_PAGE',$NUM_PAGE);
     }
 }

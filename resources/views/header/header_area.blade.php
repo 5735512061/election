@@ -13,6 +13,7 @@
   <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="{{asset('jquery.Thailand.js/dist/jquery.Thailand.min.css')}}">
   <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <title>ระบบเก็บคะแนนเสียงเลือกตั้ง</title>
 </head>
 <body>
   <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
@@ -75,6 +76,7 @@
 <div class="container">
   <ol class="breadcrumb">
   				<li class="breadcrumb-item"><a href="{{url('/header')}}">หน้าแรก</a></li>
+          <li class="breadcrumb-item"><a href="{{url('/header/total')}}">รายการคะแนนเสียงทั้งหมด</a></li>
   				<li class="breadcrumb-item active">กรอกข้อมูลเขตการดูแล</li>
   </ol>
   <div class="card">
@@ -91,6 +93,9 @@
                 <label>ชื่อผู้ดูแลเขต</label>
                       @if (isset($admin_name))
                        <input class="form-control" value="{{$admin_name}}" type="text" disabled>
+                      @endif
+                      @if ($errors->has('admin_id'))
+                      <span class="text-danger">({{ $errors->first('admin_id') }})</span>
                       @endif
                       @if (isset($alladmins))
                       <select name="admin_id" id="admin_id" class="form-control">
@@ -117,12 +122,16 @@
                   <label>เขตเลือกตั้ง</label>
                   <input class="form-control" name="area_name" type="text">
               </p> -->
-              <label>เขตเลือกตั้ง</label>
+              <label>เขตเลือกตั้ง
+                @if ($errors->has('area_name.*'))
+  							<span class="text-danger">({{ $errors->first('area_name.*') }})</span>
+  							@endif
+              </label>
               <div class="contacts">
                 <div class="form-group multiple-form-group input-group">
                   <input type="text" name="area_name[]" class="form-control">
                     <span class="input-group-btn">
-                      <button type="button" class="btn btn-success btn-add">+</button>
+                      <button type="button"  class="btn btn-success btn-add">+</button>
                     </span>
                 </div>
               </div>

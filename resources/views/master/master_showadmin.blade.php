@@ -7,11 +7,11 @@
     <a class="nav-link active" href="{{url('master/home')}}">ข้อมูลสมาชิกทั้งหมด</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#menu1">รายการคะแนนเสียงทั้งหมด</a>
+    <a class="nav-link" href="{{url('master/total')}}">รายการคะแนนเสียงทั้งหมด</a>
   </li>
 </ul><br>
 <div class="row">
-      <div class="col-md-9">
+      <div class="col-md-12">
           <div class="col-md-12 ">
               <div class="panel panel-info">
                   <div class="panel-heading">
@@ -46,7 +46,13 @@
                               <td>{{$header->district}}</td>
                               <td>{{$header->amphoe}}</td>
                               <td>{{$header->province}}</td>
-                              <td>10</td>
+                              <?php $sum = 0;
+                                foreach ($admin->score_admin as $key => $value) {
+                                  $sum = $sum + $value->score;
+                                }
+                              ?>
+
+                              <td>{{ $sum }}</td>
                               <td>
                               <center>
                                 <a href="{{url('master/showarea')}}/{{$admin->id}}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i> แสดงข้อมูลเขต</a>
@@ -74,34 +80,6 @@
               </div><!--/.panel-->
           </div>
     </div>
-  <div class="col-sm-3">
-  <div class="card">
-    <h6 class="card-header">ค้นหาสมาชิก</h6>
-      <div class="card-body">
-        <div class="form-group row">
-          <label class="col-sm-4 col-form-label">ชื่อ</label>
-          <div class="col-sm-8">
-            <select name="l" class="form-control">
-              <option value="">ทั้งหมด</option>
-              @if(isset($headers))
-              @foreach($headers as $index => $header)
-              <option value="{{$header->header_name}}">{{$header->header_name}}</option>
-              @endforeach
-              @else
-              <option value="ทั้งหมด">ทั้งหมด</option>
-              @endif
-            </select>
-          </div>
-
-      </div>
-      <div class="form-group row mb-0">
-      <div class="col-sm-12">
-					<input type="submit" class="btn btn-block btn-primary" value="ค้นหา">
-				</div>
-      </div>
-      </div>
-  </div>
-  </div>
 </div>
 @endsection
 

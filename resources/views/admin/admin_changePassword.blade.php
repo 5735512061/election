@@ -26,29 +26,28 @@
               <form class="form-horizontal" method="POST" action="{{ url('admin/changePassword') }}">
                 {{ csrf_field() }}
                 <div class="form-group{{ $errors->has('current-password') ? ' has-error' : '' }}">
-                  <label for="new-password" class="col-md-4 control-label">รหัสผ่านเก่า</label>
-                      <input id="current-password" type="password" class="form-control" name="current-password" required>
-                        @if ($errors->has('current-password'))
-                          <span class="help-block">
-                            <strong>{{ $errors->first('current-password') }}</strong>
-                          </span>
-                        @endif
+                  <label for="new-password" class="col-md-12 control-label">รหัสผ่านเก่า
+                    @if ($errors->has('current-password'))
+  									<span class="text-danger">({{ $errors->first('current-password') }})</span>
+  									@endif
+                  </label>
+                      <input id="current-password" type="password" class="form-control" name="current-password">
+
                 </div>
                 <div class="form-group{{ $errors->has('new-password') ? ' has-error' : '' }}">
-                  <label for="new-password" class="col-md-4 control-label">รหัสผ่านใหม่</label>
+                  <label for="new-password" class="col-md-12 control-label">รหัสผ่านใหม่
+                    @if ($errors->has('new-password'))
+                    <span class="text-danger">({{ $errors->first('new-password') }})</span>
+                    @endif
+                  </label>
 
-                      <input id="new-password" type="password" class="form-control" name="new-password" required>
-                        @if ($errors->has('new-password'))
-                          <span class="help-block">
-                            <strong>{{ $errors->first('new-password') }}</strong>
-                          </span>
-                        @endif
+                      <input id="new-password" type="password" class="form-control" name="new-password" >
 
                 </div>
                 <div class="form-group">
-                  <label for="new-password-confirm" class="col-md-4 control-label">ยืนยันรหัสผ่าน</label>
+                  <label for="new-password-confirm" class="col-md-12 control-label">ยืนยันรหัสผ่าน</label>
 
-                      <input id="new-password-confirm" type="password" class="form-control" name="new-password_confirmation" required>
+                      <input id="new-password-confirm" type="password" class="form-control" name="new-password_confirmation" >
 
                 </div>
                 <div class="form-group">

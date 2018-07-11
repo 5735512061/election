@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app_admin')
 @section('content')
 <div class="container">
   <ol class="breadcrumb">
@@ -44,21 +44,37 @@
 		    <div class="col-md-1"></div>
 			<div class="col-md-5">
 			    <div class="form-group"><br>
-  					<label>ชื่อสมาชิก</label>
+  					<label>ชื่อสมาชิก
+              @if ($errors->has('admin_name'))
+              <span class="text-danger">({{ $errors->first('admin_name') }})</span>
+              @endif
+            </label>
   					<input class="form-control" name="admin_name" value="{{Auth::user()->admin_name}}" type="text">
   				</div>
   				<p>
-  					<label>ชื่อเข้าใช้งานระบบ</label>
+  					<label>ชื่อเข้าใช้งานระบบ
+              @if ($errors->has('name'))
+              <span class="text-danger">({{ $errors->first('name') }})</span>
+              @endif
+            </label>
   					<input class="form-control" name="name" value="{{Auth::user()->name}}" type="text">
   				</p>
   			</div>
 			<div class="col-md-5"><br>
 				<p>
-  					<label>อีเมลเข้าใช้งานระบบ</label>
-  					<input class="form-control" name="email" value="{{Auth::user()->email}}" type="text">
+  					<label>อีเมลเข้าใช้งานระบบ
+              @if ($errors->has('email'))
+              <span class="text-danger">({{ $errors->first('email') }})</span>
+              @endif
+            </label>
+  					<input class="form-control" name="email" value="{{Auth::user()->email}}" type="email">
   				</p>
           <p>
-            <label>เบอร์โทรศัพท์</label>
+            <label>เบอร์โทรศัพท์
+              @if ($errors->has('tel'))
+              <span class="text-danger">({{ $errors->first('tel') }})</span>
+              @endif
+            </label>
             <input class="form-control" name="tel" value="{{Auth::user()->tel}}" type="text">
           </p>
 

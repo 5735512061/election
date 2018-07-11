@@ -31,7 +31,7 @@ class Header extends Authenticatable
 
     public function score_header()
     {
-        return $this->hasMany('App\Score', 'id', 'master_id');
+        return $this->hasMany('App\Score', 'header_id', 'id');
     }
 
 }

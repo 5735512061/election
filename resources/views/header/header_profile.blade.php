@@ -44,34 +44,59 @@
 		    <div class="col-md-1"></div>
 			<div class="col-md-5">
 			    <div class="form-group"><br>
-  					<label>ชื่อสมาชิก</label>
-  					<input class="form-control" name="master_name" value="{{Auth::user()->header_name}}" type="text">
+  					<label>ชื่อสมาชิก
+              @if ($errors->has('header_name'))
+              <span class="text-danger">({{ $errors->first('header_name') }})</span>
+              @endif
+            </label>
+  					<input class="form-control" name="header_name" value="{{Auth::user()->header_name}}" type="text">
   				</div>
   				<p>
-  					<label>ชื่อเข้าใช้งานระบบ</label>
+  					<label>ชื่อเข้าใช้งานระบบ
+              @if ($errors->has('name'))
+              <span class="text-danger">({{ $errors->first('name') }})</span>
+              @endif
+            </label>
   					<input class="form-control" name="name" value="{{Auth::user()->name}}" type="text">
   				</p>
-
-  				<p>
-  					<label>เบอร์โทรศัพท์</label>
-  					<input class="form-control" name="tel" value="{{Auth::user()->tel}}" type="text">
-  				</p>
+          <p>
+            <label>ตำบล</label>
+            <input class="form-control" value="{{Auth::user()->district}}" disabled>
+          </p>
+          <p>
+            <label>จังหวัด</label>
+            <input class="form-control" value="{{Auth::user()->province}}" disabled>
+          </p>
 
   			</div>
 			<div class="col-md-5"><br>
 				<p>
-  					<label>อีเมลเข้าใช้งานระบบ</label>
+  					<label>อีเมลเข้าใช้งานระบบ
+              @if ($errors->has('email'))
+              <span class="text-danger">({{ $errors->first('email') }})</span>
+              @endif
+            </label>
   					<input class="form-control" name="email" value="{{Auth::user()->email}}" type="text">
   				</p>
-
-
           <p>
-            <label>จังหวัด</label>
-            <input class="form-control" name="province" value="{{Auth::user()->province}}" type="text">
+  					<label>เบอร์โทรศัพท์
+              @if ($errors->has('tel'))
+              <span class="text-danger">({{ $errors->first('tel') }})</span>
+              @endif
+            </label>
+  					<input class="form-control" name="tel" value="{{Auth::user()->tel}}" type="text">
+  				</p>
+          <p>
+            <label>อำเภอ</label>
+            <input class="form-control" value="{{Auth::user()->amphoe}}" disabled>
           </p>
 
-				<input type="hidden" class="form-control" name="master_id" value="{{Auth::user()->master_id}}">
 
+
+				<input type="hidden" class="form-control" name="master_id" value="{{Auth::user()->master_id}}">
+        <input type="hidden" class="form-control" name="province" value="{{Auth::user()->province}}">
+        <input type="hidden" class="form-control" name="amphoe" value="{{Auth::user()->amphoe}}">
+        <input type="hidden" class="form-control" name="district" value="{{Auth::user()->district}}">
 			</div>
 		    <div class="col-md-1"></div>
           </div>

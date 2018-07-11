@@ -47,12 +47,12 @@
                           </a>
 
                           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                             <a class="dropdown-item" href="{{url('/profile')}}">
-                                แก้ไขโปรไฟล์
-                             </a>
-														 <a class="dropdown-item" href="{{url('/header/changePassword')}}">
-                                เปลี่ยนรหัสผ่าน
-                             </a>
+                            <a class="dropdown-item" href="{{url('header/profile')}}">
+                               แก้ไขโปรไฟล์
+                            </a>
+                            <a class="dropdown-item" href="{{url('/header/changePassword')}}">
+                               เปลี่ยนรหัสผ่าน
+                            </a>
                               <a class="dropdown-item" href="{{ route('logout') }}"
                                  onclick="event.preventDefault();
                                                document.getElementById('logout-form').submit();">
@@ -76,7 +76,7 @@
 <div class="container">
 	<ol class="breadcrumb">
   				<li class="breadcrumb-item"><a href="{{url('/header')}}">หน้าแรก</a></li>
-  				<li class="breadcrumb-item active">กรอกข้อมูลเขตการดูแล</li>
+  				<li class="breadcrumb-item active">แก้ไขข้อมูลเขตการดูแล</li>
   </ol>
 <div class="row">
 <div class="col-md-12">
@@ -90,7 +90,11 @@
         <div class="col-md-1"></div>
       <div class="col-md-5">
           <div class="form-group">
-            <label>ชื่อเขต</label>
+            <label>ชื่อเขต
+              @if ($errors->has('area_name'))
+              <span class="text-danger">({{ $errors->first('area_name') }})</span>
+              @endif
+            </label>
             <input class="form-control" name="area_name" value="{{$area->area_name}}" type="text">
           </div>
           <p>

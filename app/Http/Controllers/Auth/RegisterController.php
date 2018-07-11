@@ -29,7 +29,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-      protected $redirectTo = 'home';
+       protected $redirectTo = 'master/home';
 
     /**
      * Create a new controller instance.
@@ -55,8 +55,33 @@ class RegisterController extends Controller
             'password' => 'required|string|min:6|confirmed',
             'master_name' => 'required|string|max:255',
             'party_name' => 'required|string|max:255',
-            'tel' => 'required|string|max:12',
-            'province' => 'required|string|max:12',
+            'tel' => 'required|regex:/(0)[0-9]{9}/',
+            'province' => 'required|string|max:255',
+        ],[
+           'name.required' => 'กรุณากรอกชื่อจริง',
+           'name.string' => 'กรุณากรอกชื่อเป็นข้อความ',
+           'name.max' => 'กรุณากรอกชื่อความยาวไม่เกิน 255',
+           'email.required' => 'กรุณากรอกอีเมล',
+           'email.email' => 'กรอกที่อยู่อีเมลให้ถูกต้อง',
+           'email.unique' => 'อีเมลนี้มีผู้ลงทะเบียนแล้ว',
+           'email.max' => 'กรุณากรอกอีเมลความยาวไม่เกิน 255',
+           'password.required' => 'กรุณากรอกรหัสผ่าน',
+           'password.string' => 'กรุณากรอกรหัสผ่านเป็นข้อความ',
+           'password.min' => 'กรุณากรอกรหัสผ่านอย่างน้อย 6 ตัวอักษร',
+           'password.confirmed' => 'กรุณากรอกรหัสผ่านให้ตรงกัน',
+           'master_name.required' => 'กรุณากรอกชื่อเข้าใช้งาน',
+           'master_name.string' => 'กรุณากรอกชื่อเข้าใช้งานเป็นข้อความ',
+           'master_name.max' => 'กรุณากรอกชื่อเข้าใช้งานความยาวไม่เกิน 255',
+           'party_name.required' => 'กรุณากรอกชื่อพรรค',
+           'party_name.string' => 'กรุณากรอกชื่อพรรคเป็นข้อความ',
+           'party_name.max' => 'กรุณากรอกชื่อพรรคความยาวไม่เกิน 255',
+           'tel.required' => 'กรุณากรอกเบอร์โทรศัพท์',
+           'tel.regex' => 'กรอกเบอร์โทรศัพท์ให้ถูกต้อง',
+           'province.required' => 'กรุณากรอกจังหวัด',
+           'province.string' => 'กรุณากรอกจังหวัดเป็นข้อความ',
+           'province.max' => 'กรุณากรอกจังหวัดความยาวไม่เกิน 255',
+
+
         ]);
     }
 

@@ -88,8 +88,8 @@
 
 						</div>
 						<div class="col-md-1"></div>
-			      </div>
-						<center><h5>{{$admin->admin_name}}</h5></center>
+			      </div><br>
+						
 			    </ul>
         </div>
     </div>
@@ -124,7 +124,14 @@
                             <td>{{Auth::user()->district}}</td>
                             <td>{{Auth::user()->amphoe}}</td>
                             <td>{{Auth::user()->province}}</td>
-                            <td></td>
+														@foreach($scores as $row)
+														@if($row->area_id == $area->id)
+                            <td>{{$row->score}}</td>
+														@break
+	                          @elseif($loop->last)
+	                          <td></td>
+	                          @endif
+														@endforeach
                             <td>
                             <center>
 

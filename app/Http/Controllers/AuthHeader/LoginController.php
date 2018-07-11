@@ -35,6 +35,11 @@ class LoginController extends Controller
         $this->validate($request, [
           'email' => 'required|email',
           'password' => 'required|min:6',
+        ],[
+          'email.required' => "กรุณากรอกอีเมล",
+          'email.email' => "กรุณากรอกที่อยู่อีเมลให้ถูกต้อง",
+          'password.required' => "กรุณากรอกรหัสผ่าน",
+          'password.min' => "กรุกรุณากรอกรหัสผ่านอย่างน้อย 6 ตัวอักษร",
         ]);
 
         $credential = [

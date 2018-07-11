@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-  <title>{{ config('app.name', 'Laravel') }}</title>
+  <title>ระบบเก็บคะแนนเสียงเลือกตั้ง</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
@@ -48,8 +48,11 @@
                               </a>
 
                               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                 <a class="dropdown-item" href="{{url('/profile')}}">
+                                 <a class="dropdown-item" href="{{url('/master/profile')}}">
                                     แก้ไขโปรไฟล์
+                                 </a>
+																 <a class="dropdown-item" href="{{url('/master/changePassword')}}">
+                                    เปลี่ยนรหัสผ่าน
                                  </a>
                                   <a class="dropdown-item" href="{{ route('logout') }}"
                                      onclick="event.preventDefault();
@@ -82,21 +85,16 @@
       <div class="card-header">โปรไฟล์
         </div>
         <ul class="list-group list-group-flush">
-        <div class="container">
+        <div class="container"><br>
       <div class="row">
           <div class="col-md-1"></div>
 
         <div class="col-md-9">
           <center>
           <img src="{{url('uploads')}}/{{$header->image}}" style="width:150px; height:150px;  border-radius:50%; margin-right:25px;">
-        <br>
-        <lable>อัปโหลดรูปโปรไฟล์</lable>
+        <br><br>
+        
           </center>
-        </div>
-        <div class="col-md-9">
-            <input type="file" name="avatar">
-            <input type="hidden" name="_token" value="{{ csrf_token() }}">
-            {{ csrf_field() }}
         </div>
       </div>
       </ul>
@@ -114,34 +112,61 @@
 		    <div class="col-md-1"></div>
 			<div class="col-md-5">
 			    <div class="form-group">
-  					<label>ชื่อสมาชิก</label>
+  					<label>ชื่อสมาชิก
+							@if ($errors->has('header_name'))
+							<span class="text-danger">({{ $errors->first('header_name') }})</span>
+							@endif
+						</label>
   					<input class="form-control" name="header_name" value="{{$header->header_name}}" type="text">
   				</div>
   				<p>
-  					<label>ชื่อเข้าใช้งานระบบ</label>
+  					<label>ชื่อเข้าใช้งานระบบ
+							@if ($errors->has('name'))
+							<span class="text-danger">({{ $errors->first('name') }})</span>
+							@endif
+						</label>
   					<input class="form-control" name="name" value="{{$header->name}}" type="text">
   				</p>
 					<p>
-					<label>ตำบล</label>
+					<label>ตำบล
+						@if ($errors->has('district'))
+						<span class="text-danger">({{ $errors->first('district') }})</span>
+						@endif
+					</label>
 					<input class="form-control" name="district" value="{{$header->district}}" type="text">
 					</p>
-
 					<p>
-            <label>จังหวัด</label>
+            <label>จังหวัด
+							@if ($errors->has('province'))
+							<span class="text-danger">({{ $errors->first('province') }})</span>
+							@endif
+						</label>
             <input class="form-control" name="province" value="{{$header->province}}" type="text">
           </p>
   			</div>
 			<div class="col-md-5">
 				<p>
-  					<label>อีเมลเข้าใช้งานระบบ</label>
+  					<label>อีเมลเข้าใช้งานระบบ
+							@if ($errors->has('email'))
+							<span class="text-danger">({{ $errors->first('email') }})</span>
+							@endif
+						</label>
   					<input class="form-control" name="email" value="{{$header->email}}" type="text">
   				</p>
 					<p>
-						<label>เบอร์โทรศัพท์</label>
+						<label>เบอร์โทรศัพท์
+							@if ($errors->has('tel'))
+							<span class="text-danger">({{ $errors->first('tel') }})</span>
+							@endif
+						</label>
 						<input class="form-control" name="tel" value="{{$header->tel}}" type="text">
 					</p>
 					<p>
-            <label>อำเภอ</label>
+            <label>อำเภอ
+							@if ($errors->has('amphoe'))
+							<span class="text-danger">({{ $errors->first('amphoe') }})</span>
+							@endif
+						</label>
             <input class="form-control" name="amphoe" value="{{$header->amphoe}}" type="text">
           </p>
 

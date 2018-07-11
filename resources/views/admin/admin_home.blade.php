@@ -2,7 +2,7 @@
 @section('content')
 <div class="container">
   <ol class="breadcrumb">
-        <h7>Admin</h7>
+        <h7>ผู้ดูแลเขต</h7>
   </ol>
   <ul class="nav nav-tabs">
   <li class="nav-item">
@@ -20,18 +20,24 @@
   <div class="row">
     <div class="col-md-5">
        เขตเลือกตั้ง
+       @if ($errors->has('area_id'))
+        <span class="text-danger">({{ $errors->first('area_id') }})</span>
+       @endif
     </div>
     <div class="col-md-4">
        วันที่เก็บคะแนน
+       @if ($errors->has('date'))
+        <span class="text-danger">({{ $errors->first('date') }})</span>
+       @endif
     </div>
     <div class="col-md-2"></div>
   </div>
   <div class="row">
     <div class="col-md-5">
-       <select name="area_id" id="area_id" class="form-control" a required>
+       <select name="area_id" id="area_id" class="form-control" required>
               <option disabled selected value="">เลือกเขตที่ต้องการจะกรอกคะแนน</option>
               @foreach($allareas as $allarea)
-                  <option value="{{$allarea->id}}" required>{{ $allarea->area_name }}</option>
+                  <option value="{{$allarea->id}}">{{ $allarea->area_name }}</option>
               @endforeach
        </select>
     </div>
@@ -76,6 +82,7 @@
                           <td>{{$header->district}}</td>
                           <td>{{$header->amphoe}}</td>
                           <td>{{$header->province}}</td>
+                          @if(isset($query))
                           @foreach($query as $q)
                           @if($q->area_name==$area->area_name)
                           <td>{{$q->sumscore}}</td>
@@ -84,6 +91,7 @@
                           <td></td>
                           @endif
                           @endforeach
+                          @endif
                         </tr>
                       </tbody>
                       @endforeach
@@ -103,7 +111,7 @@
       </div>
 @endif
 @if(isset($admin_add))
-<form action="{{url('admin/addscore')}}" method="POST" autocomplete="off">
+<form action="{{url('admin/addscore')}}" method="POST" >
 {{ csrf_field() }}
 <div class="row">
   <div class="col-md-5">
@@ -116,7 +124,7 @@
 </div>
 <div class="row">
   <div class="col-md-5">
-     <select name="area_id" id="area_id" class="form-control" a required>
+     <select name="area_id" id="area_id" class="form-control" required>
             <option disabled selected value="">เลือกเขตที่ต้องการจะกรอกคะแนน</option>
             @foreach($allareas_add as $allarea)
                 <option value="{{$allarea->id}}" required>{{ $allarea->area_name }}</option>
@@ -157,8 +165,10 @@
               <input class="form-control" name="province" value="{{$header_add->province}}" type="text" disabled>
             </p>
   			    <p>
-              <label>คะแนนเสียง</label>
-              <input class="form-control" type="number" value="" min="0" name="score" required>
+              <label>คะแนนเสียง
+
+              </label>
+              <input class="form-control" type="number" value="{{old ('score')}}" min="0" name="score" required>
             </p>
     			</div>
   			<div class="col-md-5">
@@ -186,6 +196,7 @@
             </div>
             <div class="row">
               <div class="col-md-6"></div>
+              <input type="hidden" class="form-control" name="header_id" value="{{$header_add->id}}">
   						<input type="hidden" class="form-control" name="master_id" value="{{$master_add->id}}">
               <input type="hidden" class="form-control" name="area_id" value="{{$area_add->id}}">
   		        <input type="hidden" class="form-control" name="admin_id" value="{{Auth::user()->id}}">
@@ -235,7 +246,8 @@
                                   <td>{{$header->district}}</td>
                                   <td>{{$header->amphoe}}</td>
                                   <td>{{$header->province}}</td>
-                                  <td><input class="form-control" name="score[]" id="score{{$score->score_id}}" type="number" value="{{$score->score}}" disabled="disabled"></td>
+                                  <td>
+                                    <input class="form-control" name="score[]" id="score{{$score->score_id}}" type="number" value="{{$score->score}}" disabled="disabled" required min="0"></td>
 
                                   <td>{{$score->date}}</td>
 
@@ -268,7 +280,7 @@
       <div class="form-group row">
         <label class="col-sm-4 col-form-label">ชื่อเขต</label>
         <div class="col-sm-8">
-            <input type="text" class="form-control" name="key">
+              <input type="text" class="form-control" name="key" autocomplete="off">
        </div>
 
     </div>

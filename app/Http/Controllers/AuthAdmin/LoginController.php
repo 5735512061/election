@@ -36,7 +36,13 @@ class LoginController extends Controller
         $this->validate($request, [
           'email' => 'required|email',
           'password' => 'required|min:6'
+        ],[
+          'email.required' => "กรุณากรอกอีเมล",
+          'email.email' => "กรุณากรอกที่อยู่อีเมลให้ถูกต้อง",
+          'password.required' => "กรุณากรอกรหัสผ่าน",
+          'password.min' => "กรุณากรอกรหัสผ่านอย่างน้อย 6 ตัวอักษร",
         ]);
+
 
         $credential = [
           'email' => $request->email,
@@ -47,7 +53,7 @@ class LoginController extends Controller
        if(Auth::guard('admin')->attempt($credential, $request->member)){
          return redirect()->intended(route('admin.home'));
        }
-
+       
        return redirect()->back()->withInput($request->only('email','remember'));
     }
 

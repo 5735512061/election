@@ -23,6 +23,8 @@ class CreateScoresTable extends Migration
             $table->foreign('admin_id')->references('id')->on('admins');
             $table->integer('area_id')->unsigned();
             $table->foreign('area_id')->references('id')->on('areas');
+            $table->integer('header_id')->unsigned();
+            $table->foreign('header_id')->references('id')->on('headers');
             $table->timestamps();
         });
     }

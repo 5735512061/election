@@ -22,27 +22,33 @@ class AdminController extends Controller
      */
 
      public function showChangePasswordForm(){
-       return view('admin.admin_changepassword');
+       return view('admin/admin_changePassword');
      }
 
      public function changePassword(Request $request){
          if (!(Hash::check($request->get('current-password'), Auth::user()->password))) {
              // The passwords matches
-             return redirect()->back()->with("error","Your current password does not matches with the password you provided. Please try again.");
+             return redirect()->back()->with("error","รหัสผ่านปัจจุบันของคุณไม่ตรงกับรหัสผ่านที่คุณระบุ กรุณาลองอีกครั้ง");
          }
          if(strcmp($request->get('current-password'), $request->get('new-password')) == 0){
              //Current password and new password are same
-             return redirect()->back()->with("error","New Password cannot be same as your current password. Please choose a different password.");
+             return redirect()->back()->with("error","รหัสผ่านใหม่ต้องไม่เหมือนกับรหัสผ่านปัจจุบันของคุณ โปรดเลือกรหัสผ่านอื่น");
          }
          $validatedData = $request->validate([
              'current-password' => 'required',
              'new-password' => 'required|string|min:6|confirmed',
+         ],[
+             'current-password.required' => 'กรุณากรอกรหัสผ่านเก่า',
+             'new-password.required' => 'กรุณากรอกรหัสผ่านใหม่',
+             'new-password.min' => 'กรุณากรอกรหัสผ่านใหม่อย่างน้อย 6 อักษร',
+             'new-password.confirmed' => 'กรุณายืนยันรหัสผ่านใหม่',
+
          ]);
          //Change Password
          $user = Auth::user();
          $user->password = bcrypt($request->get('new-password'));
          $user->save();
-         return redirect()->back()->with("success","Password changed successfully !");
+         return redirect()->back()->with("success","เปลี่ยนรหัสผ่านสำเร็จ");
      }
 
     public function __construct()
@@ -63,7 +69,6 @@ class AdminController extends Controller
                    ->orderBy('updated_at','desc')
                    ->paginate($NUM_PAGE);
       $query = DB::select('SELECT areas.area_name,scores.admin_id,SUM(scores.score) AS sumscore FROM scores LEFT JOIN areas ON scores.area_id = areas.id GROUP BY admin_id,area_name');
-
       $page = $request->input('page');
       $page = ($page != null)?$page:1;
       $admin = Admin::findOrFail(Auth::user()->id);
@@ -105,6 +110,25 @@ class AdminController extends Controller
 
     public function update_avatar(Request $request)
     {
+      request()->validate([
+       'admin_name'  => 'required|max:255',
+       'email' => 'email|required',
+       'email' => 'email|required|unique:admins,email,'.Auth::user()->id,
+       'tel' => 'required|regex:/(0)[0-9]{9}/',
+       'name' => 'required|max:255',
+
+      ], [
+       'admin_name.required' => 'กรุณากรอกชื่อผู้ดูแลเขต',
+       'admin_name.max' => 'กรุณากรอกชื่อผู้ดูแลเขตความยาวไม่เกิน 255 ตัวอักษร',
+       'email.required' => 'กรุณากรอกอีเมล',
+       'email.unique' => 'อีเมลนี้มีผู้ลงทะเบียนแล้ว',
+       'email.email' => 'กรอกที่อยู่อีเมลให้ถูกต้อง',
+       'tel.required' => 'กรุณากรอกเบอร์โทรศัพท์',
+       'tel.regex' => 'กรอกเบอร์โทรศัพท์ให้ถูกต้อง',
+       'name.required' => 'กรุณากรอกชื่อ',
+       'name.max' => 'กรุณากรอกชื่อความยาวไม่เกิน 255 ตัวอักษร',
+
+      ]);
       if($request->hasFile('avatar'))
       {
       $avatar = $request->file('avatar');
@@ -122,6 +146,14 @@ class AdminController extends Controller
     }
 
     public function addscore(Request $request){
+       request()->validate([
+       'area_id'  => 'required',
+       'date' => 'required|date',
+      ], [
+       'area_id.required' => 'กรุณากรอกชื่อเขตที่ต้องการ',
+       'date.required' => 'กรุณากรอกวันที่',
+       'date.date' => 'กรุณากรอกข้อมูลวันที่ให้ถูกต้อง',
+      ]);
         $search = Score::where('area_id',$request->get('area_id'))
                        ->where('date',$request->get('date'))
                        ->get();
@@ -184,7 +216,9 @@ class AdminController extends Controller
                 Score::destroy($score_id);
             }
         }
-        return redirect('admin/showscore');
+        //return redirect('admin/showscore');
+        return back();
+
     }
 
     public function showscore(Request $request){

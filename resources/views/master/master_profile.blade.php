@@ -44,29 +44,49 @@
 		    <div class="col-md-1"></div>
 			<div class="col-md-5">
 			    <div class="form-group"><br>
-  					<label>ชื่อสมาชิก</label>
+  					<label>ชื่อหัวหน้าพรรค
+              @if ($errors->has('master_name'))
+              <span class="text-danger">({{ $errors->first('master_name') }})</span>
+              @endif
+            </label>
   					<input class="form-control" name="master_name" value="{{Auth::user()->master_name}}" type="text">
   				</div>
   				<p>
-  					<label>ชื่อเข้าใช้งานระบบ</label>
+  					<label>ชื่อเข้าใช้งานระบบ
+              @if ($errors->has('name'))
+              <span class="text-danger">({{ $errors->first('name') }})</span>
+              @endif
+            </label>
   					<input class="form-control" name="name" value="{{Auth::user()->name}}" type="text">
   				</p>
 
 
           <p>
-            <label>จังหวัด</label>
+            <label>จังหวัด
+              @if ($errors->has('province'))
+              <span class="text-danger">({{ $errors->first('province') }})</span>
+              @endif
+            </label>
             <input class="form-control" name="province" value="{{Auth::user()->province}}" type="text">
           </p>
 
   			</div>
 			<div class="col-md-5"><br>
 				<p>
-  					<label>อีเมลเข้าใช้งานระบบ</label>
+  					<label>อีเมลเข้าใช้งานระบบ
+              @if ($errors->has('email'))
+              <span class="text-danger">({{ $errors->first('email') }})</span>
+              @endif
+            </label>
   					<input class="form-control" name="email" value="{{Auth::user()->email}}" type="text">
   				</p>
 
           <p>
-  					<label>เบอร์โทรศัพท์</label>
+  					<label>เบอร์โทรศัพท์
+              @if ($errors->has('tel'))
+              <span class="text-danger">({{ $errors->first('tel') }})</span>
+              @endif
+            </label>
   					<input class="form-control" name="tel" value="{{Auth::user()->tel}}" type="text">
   				</p>
 				<input type="hidden" class="form-control" name="master_id" value="{{Auth::user()->id}}">

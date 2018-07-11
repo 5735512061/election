@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-  <title>{{ config('app.name', 'Laravel') }}</title>
+  <title>ระบบเก็บคะแนนเสียงเลือกตั้ง</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
@@ -48,8 +48,11 @@
                               </a>
 
                               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                 <a class="dropdown-item" href="{{url('/profile')}}">
+                                 <a class="dropdown-item" href="{{url('header/profile')}}">
                                     แก้ไขโปรไฟล์
+                                 </a>
+																 <a class="dropdown-item" href="{{url('header/changePassword')}}">
+                                    เปลี่ยนรหัสผ่าน
                                  </a>
                                   <a class="dropdown-item" href="{{ route('logout') }}"
                                      onclick="event.preventDefault();
@@ -82,24 +85,16 @@
       <div class="card-header">โปรไฟล์
         </div>
         <ul class="list-group list-group-flush">
-        <div class="container">
+        <div class="container"><br>
       <div class="row">
         <div class="col-md-1"></div>
         <div class="col-md-9">
           <center>
           <img src="{{url('uploads')}}/{{$admin->image}}" style="width:150px; height:150px;  border-radius:50%; margin-right:25px;">
-        <br>
-        <lable>อัปโหลดรูปโปรไฟล์</lable><br><br>
+        <br><br>
           </center>
         </div>
 			</div>
-			<div class="row">
-        <div class="col-md-9">
-            <input type="file" name="avatar">
-            <input type="hidden" name="_token" value="{{ csrf_token() }}"><br><br>
-            {{ csrf_field() }}
-        </div>
-      </div>
       </ul>
   </div>
 
@@ -117,11 +112,19 @@
         <div class="col-md-1"></div>
       <div class="col-md-5">
           <div class="form-group">
-            <label>ชื่อผู้ดูแลเขต</label>
+            <label>ชื่อผู้ดูแลเขต
+							@if ($errors->has('admin_name'))
+							 <span class="text-danger">({{ $errors->first('admin_name') }})</span>
+							@endif
+						</label>
             <input class="form-control" name="admin_name" value="{{$admin->admin_name}}" type="text">
           </div>
           <p>
-            <label>ชื่อเข้าใช้งานระบบ</label>
+            <label>ชื่อเข้าใช้งานระบบ
+							@if ($errors->has('name'))
+							 <span class="text-danger">({{ $errors->first('name') }})</span>
+							@endif
+						</label>
             <input class="form-control" name="name" value="{{$admin->name}}" type="text">
           </p>
 					<p>
@@ -136,11 +139,20 @@
         </div>
       <div class="col-md-5">
         <p>
-            <label>อีเมลเข้าใช้งานระบบ</label>
+            <label>อีเมลเข้าใช้งานระบบ
+							@if ($errors->has('email'))
+							 <span class="text-danger">({{ $errors->first('email') }})</span>
+							@endif
+						</label>
             <input class="form-control" name="email" value="{{$admin->email}}" type="text">
           </p>
 					<p>
-            <label>เบอร์โทรศัพท์</label>
+            <label>เบอร์โทรศัพท์
+							@if ($errors->has('tel'))
+							 <span class="text-danger">({{ $errors->first('tel') }})</span>
+							@endif
+
+						</label>
             <input class="form-control" name="tel" value="{{$admin->tel}}" type="text">
           </p>
 					<p>

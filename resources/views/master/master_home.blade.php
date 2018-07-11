@@ -4,10 +4,10 @@
 <div class="container">
   <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link active" href="{{url('/home')}}">ข้อมูลสมาชิกทั้งหมด</a>
+    <a class="nav-link active" href="{{url('master/home')}}">ข้อมูลสมาชิกทั้งหมด</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#menu1">รายการคะแนนเสียงทั้งหมด</a>
+    <a class="nav-link" href="{{url('/master/total')}}">รายการคะแนนเสียงทั้งหมด</a>
   </li>
 </ul><br>
 <div class="row">
@@ -31,7 +31,7 @@
                           <tr>
                             <th></th>
                             <th class="hidden-xs">#</th>
-                            <th>ชื่อสมาชิก</th>
+                            <th width="15%">ชื่อสมาชิก</th>
                             <th>ตำบล</th>
                             <th>อำเภอ</th>
                             <th>จังหวัด</th>
@@ -55,20 +55,23 @@
                             <td>{{$header->amphoe}}</td>
                             <td>{{$header->province}}</td>
                             <td>sdfasefsfsf<br>sdfgdsgdfg</td>
-                            <input type="hidden" name="note" id="myText">
+                        
                             <td>
 
                               <a href="{{url('master/show/')}}/{{$header->id}}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i> แสดง</a>
                               <a href="{{url('master/edit/')}}/{{$header->id}}" class="btn btn-warning btn-sm"><i class="fa fa-pencil"></i> แก้ไข</a>
+                              <form  action="{{url('master/block')}}/{{$header->id}}" onsubmit="return myFunction();return false;" method="post">
+                              <input type="hidden" name="note" id="myText">
                               @if($header->status == "1")
-
-                              <a href="{{url('master/block')}}/{{$header->id}}" class="btn btn-success btn-sm" onclick="myFunction();return false;"><i class="fa fa-trash"></i>บล็อก</a>
+                              {{csrf_field()}}
+                              <input type="submit" value="Submit" class="btn btn-success btn-sm">
+                             </form>
                               @else
                               <a href="{{url('master/block')}}/{{$header->id}}" class="btn btn-danger btn-sm" onclick="return confirm('ท่านต้องการปลดบล็อกสมาชิกใช่หรือไม่ ?')"><i class="fa fa-trash"></i>ปลดบล็อก</a>
                               @endif
                               {{csrf_field()}}
-
                             </td>
+
                           </tr>
                         </tbody>
                         @endforeach
@@ -97,7 +100,7 @@
         <div class="form-group row">
           <label class="col-sm-4 col-form-label">ชื่อ</label>
           <div class="col-sm-8">
-              <input type="text" class="form-control" name="key">
+              <input type="text" class="form-control" name="key" autocomplete="off">
             </select>
           </div>
       </div>
